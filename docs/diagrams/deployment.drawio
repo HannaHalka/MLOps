@@ -1,0 +1,31 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Сторінка-1" id="PDhf_l8JpFqtz1SeECFB">
+    <mxGraphModel dx="905" dy="506" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="1">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="O7lasuxkhrV1NB_Kxdlp-68" parent="1" style="verticalAlign=top;align=center;shape=cube;size=10;direction=south;fontStyle=0;html=1;boundedLbl=1;spacingLeft=5;whiteSpace=wrap;strokeColor=#FFFFFF;fontColor=#FFFFFF;fillColor=#182E3E;labelBackgroundColor=none;" value="Local Machine / Docker" vertex="1">
+          <mxGeometry height="240" width="790" x="20" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="O7lasuxkhrV1NB_Kxdlp-74" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=light-dark(#dae8fc, #5a6b81);" value="MinIO" vertex="1">
+          <mxGeometry height="50" width="120" x="40" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="O7lasuxkhrV1NB_Kxdlp-77" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=light-dark(#dae8fc, #5a6b81);" value="Model service" vertex="1">
+          <mxGeometry height="50" width="120" x="660" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="O7lasuxkhrV1NB_Kxdlp-78" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=light-dark(#dae8fc, #5a6b81);" value="MLflow" vertex="1">
+          <mxGeometry height="50" width="120" x="500" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="O7lasuxkhrV1NB_Kxdlp-79" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=light-dark(#dae8fc, #5a6b81);" value="PostgreSQL" vertex="1">
+          <mxGeometry height="50" width="120" x="345" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="O7lasuxkhrV1NB_Kxdlp-80" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=light-dark(#dae8fc, #5a6b81);" value="Airflow" vertex="1">
+          <mxGeometry height="50" width="120" x="190" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="O7lasuxkhrV1NB_Kxdlp-81" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;" value="API + model" vertex="1">
+          <mxGeometry height="60" width="120" x="660" y="220" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
