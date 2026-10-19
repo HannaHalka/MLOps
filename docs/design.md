@@ -32,15 +32,15 @@ can reassign a request to another team.
 
 ### Non-functional requirements
 
-|            Requirement            | Description                                                                              |
-|:---------------------------------:|:-----------------------------------------------------------------------------------------|
-|             Freshness             | New tickets should be available for prediction within 5 seconds after creation           |
-|      Latency and Throughput       | p95 prediction latency $\leqslant$ 500 ms                                                |
-|     Availability and Fallback     | Target availability $\geqslant$ 99%                                                      |
-|          Reproducibility          | Training results must be reproducible using the same code version, data version          |
-|           Adaptability            | New requests should be ingested daily. Model retraining should be evaluated monthly      |
-| Bservability without ground truth | Monitor prediction counts, latency, errors, and changes in input data distribution daily |
-|    Cost and resource ceilings     | The system should run locally with up to 4 CPU cores and 8 GB RAM                        |
+|            Requirement            | Description                                                                                       |
+|:---------------------------------:|:--------------------------------------------------------------------------------------------------|
+|             Freshness             | New tickets should be available for prediction within 5 seconds after creation                    |
+|      Latency and Throughput       | p95 prediction latency $\leqslant$ 500 ms                                                         |
+|     Availability and Fallback     | Target availability $\geqslant$ 99%                                                               |
+|          Reproducibility          | Training results must be reproducible using the same code version, data version                   |
+|           Adaptability            | New requests should be ingested daily. Model retraining should be evaluated monthly               |
+| Bservability without ground truth | Monitor prediction counts, latency, errors, and changes in input data distribution daily          |
+|    Cost and resource ceilings     | The system should run locally with up to 4 CPU cores and 8 GB RAM. Approximately $\leqslant$ $50. |
 
 ### In scope
 
@@ -129,8 +129,6 @@ The test dataset will be used for final evaluation.
 
 ## 6.2 Infra
 
-## 6.2 Infra
-
 | Component              | Local                    | AWS equivalent          |
 |------------------------|--------------------------|-------------------------|
 | Object storage         | MinIO-compatible storage | Amazon S3               |
@@ -149,8 +147,6 @@ The test dataset will be used for final evaluation.
 
 ## 6.3 Performance
 
-## 6.3 Performance
-
 The system should process at least 3 requests per second, with p95 prediction latency **$\leqslant$ 500ms**. \
 We will use real-time inference because customer support tickets should be assigned to the appropriate team shortly after creation.
 Historical data will be processed in daily batches for model training. 
@@ -162,31 +158,93 @@ Only authorized services will be allowed to access the Prediction API.
 
 ## 6.5 Data privacy
 
-
+The dataset contains personal information such as `customer_name`, `customer_email`, `customer_age`, and `customer_gender`. \
+Personal information will be removed before processing. Only the data required for model training and prediction will be used.
 
 ## 6.6 Monitoring and alarms
 
-
+The system will monitor: \
+**Prediction latency** -- an alert is triggered if p95 latency exceeds 500 ms. \
+**Error rate** -- an alert is triggered if more than 5% of requests fail. \
+**Data freshness** -- an alert is triggered if no new data is ingested for more than 24 hours.
 
 ## 6.7 Cost
 
+* Standard Kubernetes version support: \$0.10 per cluster per hour \
+Estimated usage: 730 hours per month. $\Rightarrow$ \$73.00
 
+
+* Instance: t3.medium (2 vCPU, 4 GiB RAM). \
+On-Demand price: \$0.0416 per hour. \
+Estimated usage: 730 hours per month. $\Rightarrow$ \$30.37
+
+
+* Standard storage: \$0.023 per GB per month. \
+Assumed storage: 100 GB. $\Rightarrow$ \$2.30
+
+
+* Private container image storage: \$0.10 per GB per month. \
+Assumed storage: 10 GB. $\Rightarrow$ \$1.00
+
+
+* Small managed Airflow environment: \$0.49 per hour. \
+Estimated usage: 730 hours per month. $\Rightarrow$ \$357.70
+
+
+* Custom metrics: \$0.30 per metric per month. \
+Assumed usage: 5 billable metrics. $\Rightarrow$ \$1.50
+
+
+* Compute price: \$0.24 per OCU-hour. \
+Assumed capacity: 2 OCUs running for 730 hours. $\Rightarrow$ \$350.40
+
+### Total Estimated Monthly Cost
+
+Subtotal of the services with calculated estimates: \
+\$73.00 + \$30.37 + \$2.30 + \$1.00 + \$357.70 + \$1.50 + \$350.40 = **\$816.27 month** \
+This is a partial estimate. The final monthly cost will be higher after database, ML services, networking, additional storage and LLM usage are included.
 
 ## 6.8 Integration points
 
-
+**Upstream:** Support Ticket Dataset (Hugging Face) provides historical customer support tickets for training. \
+**Downstream:** Ticket Routing Service sends new ticket descriptions to the Prediction API and receives the predicted `assigned_team`. \
+**Data contract:** The API accepts `issue_description` as a string and returns `assigned_team` as a string.
 
 ## 6.9 Risks and uncertainties
 
 
+1. **Incorrect predictions:** \
+The model may assign tickets to the wrong team. Support agents can manually reassign them.
+2. **Data drift:** \
+New types of customer issues may reduce model accuracy. We will monitor data drift and evaluate the need for retraining.
+3. **Data quality:** \
+Missing or incorrect ticket descriptions may affect predictions. We will validate incoming data before processing.
+4. **System failures:** \
+The Prediction API may become unavailable. Tickets will be sent for manual assignment.
+5. **Data privacy:** \
+Customer information may be exposed. Personal data will be anonymized before processing.
 
-## 7.1 Risks and uncertainties
+## 7.1 Alternatives
 
+### Rule-based classification
 
+- **Pros:** Simple to implement and does not require model training.
+- **Cons:** Cannot easily handle different ways of describing the same problem.
+- **Reason for rejection:** Machine learning is more flexible for classifying customer requests.
 
-## 7.2 7.3 Placeholders
+### Manual ticket assignment
 
+- **Pros:** Support agents can use their experience and knowledge to select the appropriate team.
+- **Cons:** Time-consuming and difficult to scale as the number of requests increases.
+- **Reason for rejection:** Automatic classification can reduce manual work and speed up ticket routing.
 
+## 7.2 and 7.3 Placeholders
+
+Placeholders; Lab 2 and Lab 4 fill them.
 
 ## 7.4 Milestones
 
+**Lab 2:** Data pipelines, versioning, baseline model, and MLflow. \
+**Lab 3:** LLM baseline and retrieval. \
+**Lab 4:** Model deployment on Minikube, monitoring, and drift detection. \
+**Lab 5:** Agent traced and evaluated
